@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="BOOKS_WITH_CONVERSIONS" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="BOOKS_WITH_CONVERSIONS"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="MY_BOOKSHOP_BOOKS">
+    <resourceUri>MY_BOOKSHOP_BOOKS</resourceUri>
+  </DataSource>
+  <DataSource id="MY_BOOKSHOP_AUTHORS">
+    <resourceUri>MY_BOOKSHOP_AUTHORS</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_1" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="ID" aggregationType="sum"/>
+      <viewAttribute id="TITLE"/>
+      <viewAttribute id="STOCK" aggregationType="sum"/>
+      <viewAttribute id="PRICE" aggregationType="sum"/>
+      <viewAttribute id="CONVERTED_PRICE" aggregationType="sum"/>
+      <viewAttribute id="CURRENCY"/>
+      <viewAttribute id="AUTHOR_ID" aggregationType="sum"/>
+      <viewAttribute id="AUTHOR_NAME"/>
+      <viewAttribute hidden="true" id="JOIN$AUTHOR_ID$ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MY_BOOKSHOP_BOOKS">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TITLE" source="TITLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STOCK" source="STOCK"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRICE" source="PRICE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AUTHOR_ID" source="AUTHOR_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CONVERTED_PRICE" source="PRICE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$AUTHOR_ID$ID" source="AUTHOR_ID"/>
+    </input>
+    <input node="MY_BOOKSHOP_AUTHORS">
+      <mapping xsi:type="Calculation:AttributeMapping" target="AUTHOR_NAME" source="NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$AUTHOR_ID$ID" source="ID"/>
+    </input>
+    <joinAttribute name="JOIN$AUTHOR_ID$ID"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="TITLE" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TITLE"/>
+      <keyMapping columnObjectName="Join_1" columnName="TITLE"/>
+    </attribute>
+    <attribute id="CURRENCY" order="6" semanticType="currencyCode" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CURRENCY"/>
+      <keyMapping columnObjectName="Join_1" columnName="CURRENCY"/>
+    </attribute>
+    <attribute id="AUTHOR_NAME" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="AUTHOR_NAME"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="ID" order="1" aggregationType="sum" measureType="simple" restrictionExpressionLanguage="SQL">
+      <descriptions defaultDescription="ID"/>
+      <measureMapping columnObjectName="Join_1" columnName="ID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="STOCK" order="3" aggregationType="sum" measureType="simple" restrictionExpressionLanguage="SQL">
+      <descriptions defaultDescription="STOCK"/>
+      <measureMapping columnObjectName="Join_1" columnName="STOCK"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="PRICE" order="4" semanticType="amount" aggregationType="sum" measureType="amount" restrictionExpressionLanguage="SQL">
+      <descriptions defaultDescription="PRICE"/>
+      <unitCurrencyAttribute attributeName="CURRENCY"/>
+      <measureMapping columnObjectName="Join_1" columnName="PRICE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="CONVERTED_PRICE" order="5" semanticType="amount" aggregationType="sum" measureType="amount" restrictionExpressionLanguage="SQL" unconverted="false">
+      <descriptions defaultDescription="PRICE_1"/>
+      <fixedCurrency>USD</fixedCurrency>
+      <currencyConversion errorHandling="failOnError" generateOutputUnitCurrencyAttribute="true" outputUnitCurrencyAttributeName="CONVERTED_PRICE_CURRENCY_1" convert="true" accuracy="COMPATIBILITY" method="ERP" lookup="REGULAR">
+        <client>
+          <value>000</value>
+        </client>
+        <currencyConversionTables rates="CURRENCIES_TCURR" configuration="CURRENCIES_TCURV" prefactors="CURRENCIES_TCURF" notations="CURRENCIES_TCURN" precisions="CURRENCIES_TCURX"/>
+        <outputDataType datatype="DECIMAL" length="34" scale="12"/>
+        <sourceCurrency>
+          <attribute attributeName="CURRENCY"/>
+        </sourceCurrency>
+        <erpDecimalShift>true</erpDecimalShift>
+        <round>true</round>
+        <targetCurrency>
+          <value>USD</value>
+        </targetCurrency>
+        <referenceDate>
+          <value>20230321</value>
+        </referenceDate>
+        <exchangeRateType>M</exchangeRateType>
+      </currencyConversion>
+      <measureMapping columnObjectName="Join_1" columnName="CONVERTED_PRICE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="AUTHOR_ID" order="7" aggregationType="sum" measureType="simple" restrictionExpressionLanguage="SQL">
+      <descriptions defaultDescription="AUTHOR_ID"/>
+      <measureMapping columnObjectName="Join_1" columnName="AUTHOR_ID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="197"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="MY_BOOKSHOP_BOOKS" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="209"/>
+    </shape>
+    <shape modelObjectName="MY_BOOKSHOP_AUTHORS" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="224"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
