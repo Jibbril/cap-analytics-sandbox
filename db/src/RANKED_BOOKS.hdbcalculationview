@@ -45,7 +45,7 @@
   </calculationView>
 </calculationViews>
 
-<logicalModel id="Rank_1" filterExpressionLanguage="SQL">
+<logicalModel id="Rank_1">
   <attributes>
     <attribute id="ID" order="1" descriptionColumnName="TITLE" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ID"/>
@@ -94,16 +94,16 @@
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
       <upperLeftCorner x="40" y="85"/>
     </shape>
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="95" y="332"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
     
   
     <shape expanded="true" modelObjectName="Rank_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="100" y="213"/>
       <rectangleSize height="30" width="160"/>
-    </shape>
-    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="95" y="332"/>
-      <rectangleSize height="30" width="160"/>
-    </shape>
-  </shapes>
+    </shape></shapes>
 </layout>
 </Calculation:scenario>
