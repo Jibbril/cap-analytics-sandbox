@@ -37,3 +37,17 @@ entity RANKED_BOOKS {
   PRICE: Decimal(34)  @title: 'PRICE: PRICE' ; 
   RANK: Double  @title: 'RANK: RANK' ;  
 }
+
+@cds.persistence.exists 
+@cds.persistence.calcview 
+entity BOOKS_WITH_CONVERSIONS {
+  key CONVERTED_PRICE_CURRENCY_1: String(5)  @title: 'CONVERTED_PRICE_CURRENCY_1: CONVERTED_PRICE_CURRENCY_1' ; 
+  key TITLE: String(5000)  @title: 'TITLE: TITLE' ; 
+  key CURRENCY: String(5000)  @title: 'CURRENCY: CURRENCY' ; 
+  key AUTHOR_NAME: String(5000)  @title: 'AUTHOR_NAME: NAME' ; 
+  ID: Integer  @title: 'ID: ID' ; 
+  STOCK: Integer  @title: 'STOCK: STOCK' ; 
+  PRICE: Decimal(34)  @title: 'PRICE: PRICE' ; 
+  CONVERTED_PRICE: Decimal(34)  @title: 'CONVERTED_PRICE: PRICE_1' ; 
+  AUTHOR_ID: Integer  @title: 'AUTHOR_ID: AUTHOR_ID' ; 
+}
