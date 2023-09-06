@@ -4,11 +4,6 @@ annotate service.Books with @(
     UI.LineItem : [
         {
             $Type : 'UI.DataField',
-            Label : 'id',
-            Value : id,
-        },
-        {
-            $Type : 'UI.DataField',
             Label : 'title',
             Value : title,
         },
@@ -22,11 +17,11 @@ annotate service.Books with @(
             Label : 'price',
             Value : price,
         },
-        {
-            $Type : 'UI.DataField',
-            Label : 'currency',
-            Value : currency,
-        },
+        // {
+        //     $Type : 'UI.DataField',
+        //     Label : 'currency',
+        //     Value : currency,
+        // },
         {
             $Type : 'UI.DataField',
             Label : 'Converted Price',
@@ -36,6 +31,12 @@ annotate service.Books with @(
             $Type : 'UI.DataField',
             Label : 'Converted Currency',
             Value : calculations.CONVERTED_PRICE_CURRENCY,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : 'Combination',
+            Value : calculations.CONVERTED_PRICE_AND_CURRENCY,
+            ![@UI.Importance] : #High
         },
     ]
 );

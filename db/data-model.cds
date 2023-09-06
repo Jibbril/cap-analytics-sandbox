@@ -57,6 +57,7 @@ entity BOOKS_WITH_CONVERSIONS(TARGET_CURRENCY : String(5)) {
   key TITLE: String(5000)  @title: 'TITLE: TITLE' ; 
   key CURRENCY: String(5000)  @title: 'CURRENCY: CURRENCY' ; 
   key AUTHOR_NAME: String(5000)  @title: 'AUTHOR_NAME: NAME' ; 
+  key CONVERTED_PRICE_AND_CURRENCY: String(100)  @title: 'ConvertedPriceAndCurrency: ConvertedPriceAndCurrency' ; 
   ID: Integer  @title: 'ID: ID' ; 
   STOCK: Integer  @title: 'STOCK: STOCK' ; 
   PRICE: Decimal(34)  @title: 'PRICE: PRICE' ; 
