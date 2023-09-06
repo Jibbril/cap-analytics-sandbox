@@ -27,6 +27,16 @@ annotate service.Books with @(
             Label : 'currency',
             Value : currency,
         },
+        {
+            $Type : 'UI.DataField',
+            Label : 'Converted Price',
+            Value : calculations.CONVERTED_PRICE
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : 'Converted Currency',
+            Value : calculations.CONVERTED_PRICE_CURRENCY,
+        },
     ]
 );
 annotate service.Books with @(
