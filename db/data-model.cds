@@ -1,3 +1,13 @@
+context core {
+  entity GlobalCurrencyFilter {
+    key internalId: String;
+    currencyCode: String;
+  }
+
+  entity MyCurrencyFilters as projection on GlobalCurrencyFilter
+    where internalId = 'anonymous';
+}
+
 context my.bookshop {
   entity Books {
     key id   : Integer;

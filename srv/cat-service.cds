@@ -1,4 +1,5 @@
 using my.bookshop as my from '../db/data-model';
+using core from '../db/data-model';
 using {BOOKS_WITH_AUTHORS, RANKED_BOOKS, BOOKS_WITH_CONVERSIONS} from '../db/data-model';
 
 service CatalogService {
@@ -7,6 +8,8 @@ service CatalogService {
     @readonly entity BooksWithAuthors as projection on BOOKS_WITH_AUTHORS;
     @readonly entity RankedBooks as projection on RANKED_BOOKS;
     @readonly entity BooksWithConversions as projection on BOOKS_WITH_CONVERSIONS;
+
+    @readonly entity GlobalCurrencyFilter as projection on core.GlobalCurrencyFilter;
 
     function sleep() returns Boolean;
     action setCurrencyFilter(currency: String);

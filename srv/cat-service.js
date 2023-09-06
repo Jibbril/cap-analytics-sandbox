@@ -12,6 +12,13 @@ module.exports = srv => {
     });
 
     srv.on('setCurrencyFilter', async req => {
-        console.log("ja")
+        const currencyCode = req.data?.currency;
+        const internalId = req.user?.id;
+
+        if (!currencyCode || !internalId) return req.error('Missing data for creation.');
+
+        const filter = [ { internalId, currencyCode } ];
+        
+        await UPSERT(filter).into(srv.entities.GlobalCurrencyFilter)
     })
 }
