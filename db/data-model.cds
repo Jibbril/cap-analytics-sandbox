@@ -5,7 +5,9 @@ context my.bookshop {
     stock    : Integer;
     price    : Decimal;
     currency : String;
+
     author   : Association to Authors;
+    // conversions: Association to BOOKS_WITH_CONVERSIONS on conversions.ID = id;
   }
 
   entity Authors {
@@ -40,8 +42,8 @@ entity RANKED_BOOKS {
 
 @cds.persistence.exists 
 @cds.persistence.calcview 
-entity BOOKS_WITH_CONVERSIONS {
-  key CONVERTED_PRICE_CURRENCY_1: String(5)  @title: 'CONVERTED_PRICE_CURRENCY_1: CONVERTED_PRICE_CURRENCY_1' ; 
+entity BOOKS_WITH_CONVERSIONS(TARGET_CURRENCY : String(5)) {
+  key CONVERTED_PRICE_CURRENCY: String(5)  @title: 'CONVERTED_PRICE_CURRENCY_1: CONVERTED_PRICE_CURRENCY_1' ; 
   key TITLE: String(5000)  @title: 'TITLE: TITLE' ; 
   key CURRENCY: String(5000)  @title: 'CURRENCY: CURRENCY' ; 
   key AUTHOR_NAME: String(5000)  @title: 'AUTHOR_NAME: NAME' ; 

@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="BOOKS_WITH_CONVERSIONS" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
 <descriptions defaultDescription="BOOKS_WITH_CONVERSIONS"/>
-<localVariables/>
+<localVariables>
+  <variable id="TARGET_CURRENCY" parameter="true">
+    <descriptions defaultDescription="Target currency for currency conversion"/>
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="false" defaultExpressionLanguage="SQL" defaultValue="USD">
+      <valueDomain type="Currency"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
 <variableMappings/>
 <dataSources>
   <DataSource id="MY_BOOKSHOP_BOOKS">
@@ -79,8 +87,8 @@
     </measure>
     <measure id="CONVERTED_PRICE" order="5" semanticType="amount" aggregationType="sum" measureType="amount" restrictionExpressionLanguage="SQL" unconverted="false">
       <descriptions defaultDescription="PRICE_1"/>
-      <fixedCurrency>USD</fixedCurrency>
-      <currencyConversion errorHandling="failOnError" generateOutputUnitCurrencyAttribute="true" outputUnitCurrencyAttributeName="CONVERTED_PRICE_CURRENCY_1" convert="true" accuracy="COMPATIBILITY" method="ERP" lookup="REGULAR">
+      <unitCurrencyAttribute attributeName="CONVERTED_PRICE_CURRENCY"/>
+      <currencyConversion errorHandling="setToNull" generateOutputUnitCurrencyAttribute="true" outputUnitCurrencyAttributeName="CONVERTED_PRICE_CURRENCY" convert="true" accuracy="COMPATIBILITY" method="ERP" lookup="REGULAR">
         <client>
           <value>000</value>
         </client>
@@ -92,7 +100,7 @@
         <erpDecimalShift>true</erpDecimalShift>
         <round>true</round>
         <targetCurrency>
-          <value>USD</value>
+          <localVariable>TARGET_CURRENCY</localVariable>
         </targetCurrency>
         <referenceDate>
           <value>20230321</value>
