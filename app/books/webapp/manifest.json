@@ -84,7 +84,6 @@
       "css": []
     },
     "routing": {
-      "config": {},
       "routes": [
         {
           "pattern": ":?query:",
@@ -104,12 +103,26 @@
           "name": "sap.fe.templates.ListReport",
           "options": {
             "settings": {
+              "initialLoad": true,
               "entitySet": "Books",
               "variantManagement": "Page",
               "navigation": {
                 "Books": {
                   "detail": {
                     "route": "BooksObjectPage"
+                  }
+                }
+              },
+              "content": {
+                "header": {
+                  "actions": {
+                    "BooksListReport": {
+                      "press": "ns.books.ext.booksListReport.BooksListReport.setCurrency",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Set Currency"
+                    }
                   }
                 }
               }
@@ -127,6 +140,11 @@
             }
           }
         }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {}
       }
     }
   },

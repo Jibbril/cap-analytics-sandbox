@@ -4,7 +4,7 @@
 <localVariables>
   <variable id="TARGET_CURRENCY" parameter="true">
     <descriptions defaultDescription="Target currency for currency conversion"/>
-    <variableProperties datatype="NVARCHAR" length="5" mandatory="false" defaultExpressionLanguage="SQL" defaultValue="USD">
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="false" defaultValue="USD">
       <valueDomain type="Currency"/>
       <selection multiLine="false" type="SingleValue"/>
     </variableProperties>
