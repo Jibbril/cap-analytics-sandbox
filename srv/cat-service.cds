@@ -9,4 +9,5 @@ service CatalogService {
     @readonly entity BooksWithConversions as projection on BOOKS_WITH_CONVERSIONS;
 
     function sleep() returns Boolean;
+    action setCurrencyFilter(currency: String);
 }

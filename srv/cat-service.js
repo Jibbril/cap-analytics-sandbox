@@ -1,5 +1,5 @@
 module.exports = srv => {
-    srv.on('sleep', async req => {
+    srv.on('sleep', async () => {
         try {
             const query = 'Call "sleep"()';
             const res = await cds.run(query);
@@ -10,4 +10,8 @@ module.exports = srv => {
             return false;
         }
     });
+
+    srv.on('setCurrencyFilter', async req => {
+        console.log("ja")
+    })
 }
