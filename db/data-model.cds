@@ -52,7 +52,7 @@ entity RANKED_BOOKS {
 
 @cds.persistence.exists 
 @cds.persistence.calcview 
-entity BOOKS_WITH_CONVERSIONS(TARGET_CURRENCY : String(5)) {
+entity BOOKS_WITH_CONVERSIONS() {
   key CONVERTED_PRICE_CURRENCY: String(5)  @title: 'CONVERTED_PRICE_CURRENCY_1: CONVERTED_PRICE_CURRENCY_1' ; 
   key TITLE: String(5000)  @title: 'TITLE: TITLE' ; 
   key CURRENCY: String(5000)  @title: 'CURRENCY: CURRENCY' ; 

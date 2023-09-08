@@ -170,7 +170,7 @@
           <attribute attributeName="CURRENCYCODE"/>
         </targetCurrency>
         <referenceDate>
-          <value>20230421</value>
+          <value>21001001</value>
         </referenceDate>
         <exchangeRateType>M</exchangeRateType>
       </currencyConversion>
