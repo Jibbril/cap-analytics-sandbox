@@ -2,13 +2,7 @@
 <Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="BOOK_CONVERSIONS" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
 <descriptions defaultDescription="BOOKS_WITH_CONVERSIONS"/>
 <localVariables>
-  <variable id="TARGET_CURRENCY" parameter="true">
-    <descriptions defaultDescription="Target currency for currency conversion"/>
-    <variableProperties datatype="NVARCHAR" length="5" mandatory="false" defaultValue="USD">
-      <valueDomain type="Currency"/>
-      <selection multiLine="false" type="SingleValue"/>
-    </variableProperties>
-  </variable>
+  <variable id="APPLICATIONUSER" type="session"/>
 </localVariables>
 <variableMappings/>
 <dataSources>
@@ -18,10 +12,41 @@
   <DataSource id="MY_BOOKSHOP_AUTHORS">
     <resourceUri>MY_BOOKSHOP_AUTHORS</resourceUri>
   </DataSource>
+  <DataSource id="Join_1_1$$$$getCurrencyFilterTable$$" type="TABLE_FUNCTION">
+    <resourceUri>getCurrencyFilterTable</resourceUri>
+  </DataSource>
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_1" joinType="inner">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Books">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="TITLE"/>
+      <viewAttribute id="STOCK"/>
+      <viewAttribute id="PRICE"/>
+      <viewAttribute id="CURRENCY"/>
+      <viewAttribute id="AUTHOR_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes>
+      <calculatedViewAttribute id="USER_INTERNAL_ID" datatype="NVARCHAR" length="5000" expressionLanguage="SQL">
+        <formula>'??APPLICATIONUSER??'</formula>
+      </calculatedViewAttribute>
+    </calculatedViewAttributes>
+    <input node="MY_BOOKSHOP_BOOKS"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Authors">
+    <viewAttributes>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MY_BOOKSHOP_AUTHORS"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:TableFunctionView" id="getCurrencyFilterTable" tableFunctionName="getCurrencyFilterTable">
+    <viewAttributes/>
+    <calculatedViewAttributes/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_1" cardinality="C1_1" joinType="inner" multiJoinNode="Join_1" multiJoinCentralTable="Authors" multiJoinOrder="Outside In">
     <viewAttributes>
       <viewAttribute id="ID" aggregationType="sum"/>
       <viewAttribute id="TITLE"/>
@@ -30,21 +55,56 @@
       <viewAttribute id="CONVERTED_PRICE" aggregationType="sum"/>
       <viewAttribute id="CURRENCY"/>
       <viewAttribute id="AUTHOR_ID" aggregationType="sum"/>
-      <viewAttribute id="AUTHOR_NAME"/>
-      <viewAttribute hidden="true" id="JOIN$AUTHOR_ID$ID"/>
+      <viewAttribute id="USER_INTERNAL_ID"/>
+      <viewAttribute id="CURRENCYCODE"/>
+      <viewAttribute hidden="true" id="JOIN$USER_INTERNAL_ID$INTERNALID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="MY_BOOKSHOP_BOOKS">
+    <input node="Books">
       <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="TITLE" source="TITLE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="STOCK" source="STOCK"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRICE" source="PRICE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AUTHOR_ID" source="AUTHOR_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="USER_INTERNAL_ID" source="USER_INTERNAL_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CONVERTED_PRICE" source="PRICE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$USER_INTERNAL_ID$INTERNALID" source="USER_INTERNAL_ID"/>
+    </input>
+    <input node="Join_1_1$$$$getCurrencyFilterTable$$">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCYCODE" source="CURRENCYCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$USER_INTERNAL_ID$INTERNALID" source="INTERNALID"/>
+    </input>
+    <joinAttribute name="JOIN$USER_INTERNAL_ID$INTERNALID"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_2" cardinality="C1_1" joinType="inner" multiJoinNode="Join_1" multiJoinCentralTable="Authors" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="AUTHOR_NAME"/>
+      <viewAttribute id="ID" aggregationType="sum"/>
+      <viewAttribute id="TITLE"/>
+      <viewAttribute id="STOCK" aggregationType="sum"/>
+      <viewAttribute id="PRICE" aggregationType="sum"/>
+      <viewAttribute id="CONVERTED_PRICE" aggregationType="sum"/>
+      <viewAttribute id="CURRENCY"/>
+      <viewAttribute id="AUTHOR_ID" aggregationType="sum"/>
+      <viewAttribute id="USER_INTERNAL_ID"/>
+      <viewAttribute id="CURRENCYCODE"/>
+      <viewAttribute hidden="true" id="JOIN$AUTHOR_ID$ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_1_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TITLE" source="TITLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STOCK" source="STOCK"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRICE" source="PRICE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CONVERTED_PRICE" source="CONVERTED_PRICE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AUTHOR_ID" source="AUTHOR_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="USER_INTERNAL_ID" source="USER_INTERNAL_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCYCODE" source="CURRENCYCODE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$AUTHOR_ID$ID" source="AUTHOR_ID"/>
     </input>
-    <input node="MY_BOOKSHOP_AUTHORS">
+    <input node="Authors">
       <mapping xsi:type="Calculation:AttributeMapping" target="AUTHOR_NAME" source="NAME"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$AUTHOR_ID$ID" source="ID"/>
     </input>
@@ -52,42 +112,50 @@
   </calculationView>
 </calculationViews>
 
-<logicalModel id="Join_1">
+<logicalModel id="Join_1_2">
   <attributes>
     <attribute id="TITLE" order="2" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="TITLE"/>
-      <keyMapping columnObjectName="Join_1" columnName="TITLE"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="TITLE"/>
     </attribute>
     <attribute id="CURRENCY" order="6" semanticType="currencyCode" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CURRENCY"/>
-      <keyMapping columnObjectName="Join_1" columnName="CURRENCY"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="CURRENCY"/>
     </attribute>
-    <attribute id="AUTHOR_NAME" order="8" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="USER_INTERNAL_ID" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="USER_INTERNAL_ID"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="USER_INTERNAL_ID"/>
+    </attribute>
+    <attribute id="AUTHOR_NAME" order="9" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="NAME"/>
-      <keyMapping columnObjectName="Join_1" columnName="AUTHOR_NAME"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="AUTHOR_NAME"/>
+    </attribute>
+    <attribute id="CURRENCYCODE" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CURRENCYCODE"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="CURRENCYCODE"/>
     </attribute>
   </attributes>
   <calculatedAttributes/>
   <baseMeasures>
     <measure id="ID" order="1" aggregationType="sum" measureType="simple" restrictionExpressionLanguage="SQL">
       <descriptions defaultDescription="ID"/>
-      <measureMapping columnObjectName="Join_1" columnName="ID"/>
+      <measureMapping columnObjectName="Join_1_2" columnName="ID"/>
       <exceptionAggregationMetadata/>
     </measure>
     <measure id="STOCK" order="3" aggregationType="sum" measureType="simple" restrictionExpressionLanguage="SQL">
       <descriptions defaultDescription="STOCK"/>
-      <measureMapping columnObjectName="Join_1" columnName="STOCK"/>
+      <measureMapping columnObjectName="Join_1_2" columnName="STOCK"/>
       <exceptionAggregationMetadata/>
     </measure>
     <measure id="PRICE" order="4" semanticType="amount" aggregationType="sum" measureType="amount" restrictionExpressionLanguage="SQL">
       <descriptions defaultDescription="PRICE"/>
       <unitCurrencyAttribute attributeName="CURRENCY"/>
-      <measureMapping columnObjectName="Join_1" columnName="PRICE"/>
+      <measureMapping columnObjectName="Join_1_2" columnName="PRICE"/>
       <exceptionAggregationMetadata/>
     </measure>
     <measure id="CONVERTED_PRICE" order="5" semanticType="amount" aggregationType="sum" measureType="amount" restrictionExpressionLanguage="SQL" unconverted="false">
-      <descriptions defaultDescription="PRICE_1"/>
-      <unitCurrencyAttribute attributeName="CONVERTED_PRICE_CURRENCY"/>
+      <descriptions defaultDescription="PRICE"/>
+      <unitCurrencyAttribute attributeName="CURRENCYCODE"/>
       <currencyConversion errorHandling="setToNull" generateOutputUnitCurrencyAttribute="true" outputUnitCurrencyAttributeName="CONVERTED_PRICE_CURRENCY" convert="true" accuracy="COMPATIBILITY" method="ERP" lookup="REGULAR">
         <client>
           <value>000</value>
@@ -98,21 +166,20 @@
           <attribute attributeName="CURRENCY"/>
         </sourceCurrency>
         <erpDecimalShift>true</erpDecimalShift>
-        <round>true</round>
         <targetCurrency>
-          <localVariable>TARGET_CURRENCY</localVariable>
+          <attribute attributeName="CURRENCYCODE"/>
         </targetCurrency>
         <referenceDate>
-          <value>20230321</value>
+          <value>20230421</value>
         </referenceDate>
         <exchangeRateType>M</exchangeRateType>
       </currencyConversion>
-      <measureMapping columnObjectName="Join_1" columnName="CONVERTED_PRICE"/>
+      <measureMapping columnObjectName="Join_1_2" columnName="CONVERTED_PRICE"/>
       <exceptionAggregationMetadata/>
     </measure>
     <measure id="AUTHOR_ID" order="7" aggregationType="sum" measureType="simple" restrictionExpressionLanguage="SQL">
       <descriptions defaultDescription="AUTHOR_ID"/>
-      <measureMapping columnObjectName="Join_1" columnName="AUTHOR_ID"/>
+      <measureMapping columnObjectName="Join_1_2" columnName="AUTHOR_ID"/>
       <exceptionAggregationMetadata/>
     </measure>
   </baseMeasures>
@@ -125,19 +192,36 @@
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
       <upperLeftCorner x="40" y="85"/>
     </shape>
+    <shape expanded="true" modelObjectName="Books" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-93" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Authors" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="404"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="getCurrencyFilterTable" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="296" y="404"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
     
   
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="100" y="197"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-    <shape modelObjectName="MY_BOOKSHOP_BOOKS" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="209"/>
+    <shape modelObjectName="Authors" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="942" y="30"/>
+      <rectangleSize width="136"/>
     </shape>
-    <shape modelObjectName="MY_BOOKSHOP_AUTHORS" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="224"/>
+    <shape modelObjectName="Books" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="642" y="30"/>
+      <rectangleSize width="194"/>
+    </shape>
+    <shape modelObjectName="getCurrencyFilterTable" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="942" y="202"/>
+      <rectangleSize width="194"/>
     </shape>
   </shapes>
 </layout>

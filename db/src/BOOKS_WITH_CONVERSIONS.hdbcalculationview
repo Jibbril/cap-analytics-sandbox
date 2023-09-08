@@ -21,6 +21,8 @@
       <viewAttribute id="CURRENCY"/>
       <viewAttribute id="AUTHOR_ID"/>
       <viewAttribute id="AUTHOR_NAME"/>
+    
+      <viewAttribute id="CURRENCYCODE"/>
     </viewAttributes>
     <calculatedViewAttributes>
       <calculatedViewAttribute id="CONVERTED_PRICE_AND_CURRENCY" datatype="NVARCHAR" length="100" expressionLanguage="SQL">

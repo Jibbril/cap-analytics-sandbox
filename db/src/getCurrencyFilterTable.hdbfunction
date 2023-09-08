@@ -1,0 +1,32 @@
+FUNCTION "getCurrencyFilterTable"( )
+    RETURNS table ("CURRENCYCODE" NVARCHAR(5000), "INTERNALID" NVARCHAR(5000))
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER AS
+BEGIN
+    DECLARE currency NVARCHAR(5000) := 'USD';
+    DECLARE userId NVARCHAR(5000) := SESSION_CONTEXT('APPLICATIONUSER');
+    DECLARE LT_RESULT TABLE ("CURRENCYCODE" NVARCHAR(25), "INTERNALID" NVARCHAR(5000));
+    
+    IF :userId IS NOT NULL THEN
+        -- Check if user has a row in the currency filter table
+        IF EXISTS 
+            (SELECT 1 FROM core_globalcurrencyfilter WHERE internalId = :userId LIMIT 1) 
+        THEN
+            SELECT currencyCode INTO currency
+            FROM core_globalcurrencyfilter
+            WHERE internalId = :userId
+            LIMIT 1;
+
+            -- Back to default if the  filter column is null.
+            IF :currency IS NULL THEN 
+                currency := 'USD';
+            END IF;
+        END IF;
+        
+        -- Insert into response table
+        INSERT INTO :LT_RESULT VALUES (:currency, :userId);
+    END IF;
+    
+    -- Return response table
+    return SELECT * FROM :LT_RESULT; 
+END;
