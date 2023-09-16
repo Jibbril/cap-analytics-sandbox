@@ -16,4 +16,6 @@ service CatalogService {
 
     function sleep() returns Boolean;
     action setCurrencyFilter(currency: String);
+
+    function saveCurrencyTablesToDisk() returns Boolean;
 }

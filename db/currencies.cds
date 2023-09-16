@@ -25,18 +25,6 @@ entity TCURF {
     ABWGA: String(1); // Date from which the alternative exchange rate type is valid
 };
 
-// define view TCURF as select from bydMetadata.Currency as f join bydMetadata.Currency as t on f.Code != t.Code cross join TCURV {
-//     '000' as MANDT, // Client
-//     KURST, // Exchange Rate Type
-//     f.Code as FCURR, // From currency
-//     t.Code as TCURR, // To-currency
-//     '80999898' as GDATU, // Date from which the entry is valid (Inverted) - fixed value 1900-01-01
-//     '1' as FFACT, // Ratio for the "From" Currency Units
-//     '1' as TFACT, // Ratio for the "To" Currency Unit
-//     ''  as ABWCT, // Alternative exchange rate type
-//     ''  as ABWGA // Date from which the alternative exchange rate type is valid
-// };
-
 entity TCURV {
     key KURST : String(4); // Exchange Rate Type
     MANDT : String(3) default '000'; // Client;
