@@ -12,6 +12,7 @@ Sandbox for trying out the analytics tools of SAP HANA DB Cloud. Main source of 
 - Open the `SAP HANA PROJECTS` drawer below the file tree explorer.
 - Under Database Connections, find your target container and press the green "bind" icon to the right
 - In the options that appear at the top, select `Bind to an HDI container` and then `Create new service instance`. Give it a name and await creation.
+- There will now be a .env file created in the db folder, copy this out into the top level of this repo. 
 - Press the deploy button (rocket) on the top level of the project you are targeting. So the level above `Database Connections`.
 - At this point you should be able to create `.hdbcalculationview` files in your db folder. 
 
